@@ -103,6 +103,12 @@ Vagrant.configure("2") do |config|
       path: "cluster.sh",
       args: cfg["machines"][0]["address"],
       privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "shell",
+      path: "helm.sh",
+      privileged: false
   end
 
   config.vm.define "k8s-worker-one" do |wrkr1|
