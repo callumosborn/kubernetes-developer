@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     ctl.vm.provision "shell",
-      path: "hostname.sh",
+      path: "provisioners/hostname.sh",
       args: [
         cfg["machines"][1]["address"],
         cfg["machines"][1]["name"],
@@ -94,20 +94,20 @@ Vagrant.configure("2") do |config|
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     ctl.vm.provision "shell",
-      path: "configure.sh",
+      path: "provisioners/configure.sh",
       privileged: false
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     ctl.vm.provision "shell",
-      path: "cluster.sh",
+      path: "provisioners/cluster.sh",
       args: cfg["machines"][0]["address"],
       privileged: false
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     ctl.vm.provision "shell",
-      path: "helm.sh",
+      path: "provisioners/helm.sh",
       privileged: false
   end
 
@@ -146,7 +146,7 @@ Vagrant.configure("2") do |config|
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     wrkr1.vm.provision "shell",
-      path: "hostname.sh",
+      path: "provisioners/hostname.sh",
       args: [
         cfg["machines"][0]["address"],
         cfg["machines"][0]["name"],
@@ -158,7 +158,7 @@ Vagrant.configure("2") do |config|
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     wrkr1.vm.provision "shell",
-      path: "configure.sh",
+      path: "provisioners/configure.sh",
       privileged: false
   end
 
@@ -197,7 +197,7 @@ Vagrant.configure("2") do |config|
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     wrkr2.vm.provision "shell",
-      path: "hostname.sh",
+      path: "provisioners/hostname.sh",
       args: [
         cfg["machines"][0]["address"],
         cfg["machines"][0]["name"],
@@ -209,7 +209,7 @@ Vagrant.configure("2") do |config|
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
     wrkr2.vm.provision "shell",
-      path: "configure.sh",
+      path: "provisioners/configure.sh",
       privileged: false
   end
 
