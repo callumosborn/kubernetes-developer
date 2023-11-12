@@ -77,6 +77,10 @@ Vagrant.configure("2") do |config|
 
       # Sets the amount of memory for the virtual machine (in megabytes).
       prl.memory = 4096
+
+      prl.check_guest_tools = true
+
+      prl.update_guest_tools = true
     end
 
     # Enable provisioning with a shell script.
@@ -174,6 +178,10 @@ Vagrant.configure("2") do |config|
 
       # Sets the amount of memory for the virtual machine (in megabytes).
       prl.memory = 4096
+
+      prl.check_guest_tools = true
+
+      prl.update_guest_tools = true
     end
 
     # Enable provisioning with a shell script.
@@ -225,6 +233,10 @@ Vagrant.configure("2") do |config|
 
       # Sets the amount of memory for the virtual machine (in megabytes).
       prl.memory = 4096
+
+      prl.check_guest_tools = true
+
+      prl.update_guest_tools = true
     end
 
     # Enable provisioning with a shell script.
