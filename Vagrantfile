@@ -109,6 +109,39 @@ Vagrant.configure("2") do |config|
     ctl.vm.provision "shell",
       path: "provisioners/helm.sh",
       privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "shell",
+      path: "provisioners/bootstrap.sh",
+      privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "shell",
+      path: "provisioners/ssh.sh",
+      args: cfg["email"],
+      privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "shell",
+      path: "provisioners/git.sh",
+      args: [
+        cfg["name"],
+        cfg["email"]
+      ],
+      privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "shell",
+      path: "provisioners/github.sh",
+      args: [
+        cfg["github"]["title"],
+        cfg["github"]["token"]
+      ],
+      privileged: false
   end
 
   config.vm.define "k8s-worker-one" do |wrkr1|

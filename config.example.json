@@ -1,8 +1,14 @@
 {
+  "name": "...",
+  "email": "...",
   "machines": [
     {
       "name": "...",
       "address": "..."
     }
-  ]
+  ],
+  "github": {
+    "title": "...",
+    "token": "..."
+  }
 }
