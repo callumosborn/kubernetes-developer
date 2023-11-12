@@ -47,107 +47,6 @@ Vagrant.configure("2") do |config|
   # shown above.
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  config.vm.define "k8s-control-plane", primary: true do |ctl|
-    # Every Vagrant development environment requires a box. You can search for
-    # boxes at https://vagrantcloud.com/search.
-    ctl.vm.box = "bento/ubuntu-22.04"
-
-    # The hostname the machine should have.
-    # If set to a string, the hostname will be set on boot.
-    # If set, Vagrant will update /etc/hosts on the guest with the configured hostname.
-    ctl.vm.hostname = cfg["machines"][0]["name"]
-
-    # Create a private network, which allows host-only access to the machine
-    # using a specific IP.
-    ctl.vm.network "private_network", ip: cfg["machines"][0]["address"]
-
-    # Provider-specific configuration so you can fine-tune various
-    # backing providers for Vagrant. These expose provider-specific options.
-    ctl.vm.provider "parallels" do |prl|
-
-      # You can customize the virtual machine name that appears in the Parallels Desktop GUI.
-      # By default, Vagrant sets it to the name of the folder containing the Vagrantfile plus a timestamp of when the machine was created.
-      prl.name = cfg["machines"][0]["name"]
-
-      # Full clone is a full image copy, which is totally independent from the box.
-      prl.linked_clone = false
-
-      # Sets the number of CPUs to be available to the virtual machine.
-      prl.cpus = 2
-
-      # Sets the amount of memory for the virtual machine (in megabytes).
-      prl.memory = 4096
-
-      prl.check_guest_tools = true
-
-      prl.update_guest_tools = true
-    end
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/hostname.sh",
-      args: [
-        cfg["machines"][1]["address"],
-        cfg["machines"][1]["name"],
-        cfg["machines"][2]["address"],
-        cfg["machines"][2]["name"]
-      ],
-      privileged: false
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/configure.sh",
-      privileged: false
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/cluster.sh",
-      args: cfg["machines"][0]["address"],
-      privileged: false
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/helm.sh",
-      privileged: false
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/bootstrap.sh",
-      privileged: false
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/ssh.sh",
-      args: cfg["email"],
-      privileged: false
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/git.sh",
-      args: [
-        cfg["name"],
-        cfg["email"]
-      ],
-      privileged: false
-
-    # Enable provisioning with a shell script.
-    # Path to a shell script to upload and execute.
-    ctl.vm.provision "shell",
-      path: "provisioners/github.sh",
-      args: [
-        cfg["github"]["title"],
-        cfg["github"]["token"]
-      ],
-      privileged: false
-  end
-
   config.vm.define "k8s-worker-one" do |wrkr1|
     # Every Vagrant development environment requires a box. You can search for
     # boxes at https://vagrantcloud.com/search.
@@ -179,14 +78,14 @@ Vagrant.configure("2") do |config|
       # Sets the amount of memory for the virtual machine (in megabytes).
       prl.memory = 4096
 
-      prl.check_guest_tools = true
-
+      # Automatically update Parallels tools.
       prl.update_guest_tools = true
     end
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    wrkr1.vm.provision "shell",
+    wrkr1.vm.provision "Setting hostname...",
+      type: "shell",
       path: "provisioners/hostname.sh",
       args: [
         cfg["machines"][0]["address"],
@@ -198,7 +97,8 @@ Vagrant.configure("2") do |config|
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    wrkr1.vm.provision "shell",
+    wrkr1.vm.provision "Configuring Kubernetes...",
+      type: "shell",
       path: "provisioners/configure.sh",
       privileged: false
   end
@@ -234,14 +134,14 @@ Vagrant.configure("2") do |config|
       # Sets the amount of memory for the virtual machine (in megabytes).
       prl.memory = 4096
 
-      prl.check_guest_tools = true
-
+      # Automatically update Parallels tools.
       prl.update_guest_tools = true
     end
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    wrkr2.vm.provision "shell",
+    wrkr2.vm.provision "Setting hostname...",
+      type: "shell",
       path: "provisioners/hostname.sh",
       args: [
         cfg["machines"][0]["address"],
@@ -253,8 +153,80 @@ Vagrant.configure("2") do |config|
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    wrkr2.vm.provision "shell",
+    wrkr2.vm.provision "Configuring Kubernetes...",
+      type: "shell",
       path: "provisioners/configure.sh",
+      privileged: false
+  end
+
+  config.vm.define "k8s-control-plane", primary: true do |ctl|
+    # Every Vagrant development environment requires a box. You can search for
+    # boxes at https://vagrantcloud.com/search.
+    ctl.vm.box = "bento/ubuntu-22.04"
+
+    # The hostname the machine should have.
+    # If set to a string, the hostname will be set on boot.
+    # If set, Vagrant will update /etc/hosts on the guest with the configured hostname.
+    ctl.vm.hostname = cfg["machines"][0]["name"]
+
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    ctl.vm.network "private_network", ip: cfg["machines"][0]["address"]
+
+    # Provider-specific configuration so you can fine-tune various
+    # backing providers for Vagrant. These expose provider-specific options.
+    ctl.vm.provider "parallels" do |prl|
+
+      # You can customize the virtual machine name that appears in the Parallels Desktop GUI.
+      # By default, Vagrant sets it to the name of the folder containing the Vagrantfile plus a timestamp of when the machine was created.
+      prl.name = cfg["machines"][0]["name"]
+
+      # Full clone is a full image copy, which is totally independent from the box.
+      prl.linked_clone = false
+
+      # Sets the number of CPUs to be available to the virtual machine.
+      prl.cpus = 2
+
+      # Sets the amount of memory for the virtual machine (in megabytes).
+      prl.memory = 4096
+
+      # Automatically update Parallels tools.
+      prl.update_guest_tools = true
+    end
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "Setting hostname...",
+      type: "shell",
+      path: "provisioners/hostname.sh",
+      args: [
+        cfg["machines"][1]["address"],
+        cfg["machines"][1]["name"],
+        cfg["machines"][2]["address"],
+        cfg["machines"][2]["name"]
+      ],
+      privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "Configuring Kubernetes...",
+      type: "shell",
+      path: "provisioners/configure.sh",
+      privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "Installing Helm...",
+      type: "shell",
+      path: "provisioners/helm.sh",
+      privileged: false
+
+    # Enable provisioning with a shell script.
+    # Path to a shell script to upload and execute.
+    ctl.vm.provision "Initializing cluster...",
+      type: "shell",
+      path: "provisioners/cluster.sh",
+      args: cfg["machines"][0]["address"],
       privileged: false
   end
 
