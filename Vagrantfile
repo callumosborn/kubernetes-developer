@@ -97,10 +97,10 @@ Vagrant.configure("2") do |config|
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    wrkr1.vm.provision "Configuring Kubernetes...",
-      type: "shell",
-      path: "provisioners/configure.sh",
-      privileged: false
+    # wrkr1.vm.provision "Configuring Kubernetes...",
+    #   type: "shell",
+    #   path: "provisioners/configure.sh",
+    #   privileged: false
   end
 
   config.vm.define "k8s-worker-two" do |wrkr2|
@@ -153,10 +153,10 @@ Vagrant.configure("2") do |config|
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    wrkr2.vm.provision "Configuring Kubernetes...",
-      type: "shell",
-      path: "provisioners/configure.sh",
-      privileged: false
+    # wrkr2.vm.provision "Configuring Kubernetes...",
+    #   type: "shell",
+    #   path: "provisioners/configure.sh",
+    #   privileged: false
   end
 
   config.vm.define "k8s-control-plane", primary: true do |ctl|
@@ -209,25 +209,25 @@ Vagrant.configure("2") do |config|
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    ctl.vm.provision "Configuring Kubernetes...",
-      type: "shell",
-      path: "provisioners/configure.sh",
-      privileged: false
+    # ctl.vm.provision "Configuring Kubernetes...",
+    #   type: "shell",
+    #   path: "provisioners/configure.sh",
+    #   privileged: false
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    ctl.vm.provision "Installing Helm...",
-      type: "shell",
-      path: "provisioners/helm.sh",
-      privileged: false
+    # ctl.vm.provision "Installing Helm...",
+    #   type: "shell",
+    #   path: "provisioners/helm.sh",
+    #   privileged: false
 
     # Enable provisioning with a shell script.
     # Path to a shell script to upload and execute.
-    ctl.vm.provision "Initializing cluster...",
-      type: "shell",
-      path: "provisioners/cluster.sh",
-      args: cfg["machines"][0]["address"],
-      privileged: false
+    # ctl.vm.provision "Initializing cluster...",
+    #   type: "shell",
+    #   path: "provisioners/cluster.sh",
+    #   args: cfg["machines"][0]["address"],
+    #   privileged: false
   end
 
   # Enable provisioning with a shell script.
